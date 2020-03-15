@@ -1,6 +1,6 @@
 import React from "react";
 
-const List = () => {
+const List = props => {
   return (
     <>
       <div></div>

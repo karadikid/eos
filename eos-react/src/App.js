@@ -1,37 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { JsonRpc } from "eosjs";
 import "./App.css";
 // import axios from "axios";
 import Button from "./Components/Button";
-import List from "./Components/BlockList"
+import List from "./Components/List";
 
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      blocks: [],
-      loading: true,
-      load: false
-    };
-  }
-
-  fetchData() {
-    let url = 'https://api.eosnewyork.io';
-    this.rpc = new JsonRpc(url, { fetch });
-      this.getBlocks();
-  }
-
+const App = () => {
+  const [blocks, setBlocks] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   
-  render() {
+  async function fetchData() {
+    let blockChainData;
+    const rpc = new JsonRpc('https://api.eosnewyork.io', { fetch });
+    try {
+      blockChainData = await rpc.get_info();
+      console.log(blockChainData)
+    } catch (error) {
+      console.error(JSON.stringify(error));
+    }
+  };
 
-    return (
-      <>
-        <Button />
-        <List />
-      </>
-    );
-  }
-}
+  useEffect(() => {
+   fetchData();
+  })
+  return (
+    <>
+      <Button />
+      <List />
+    </>
+  );
+};
 
 export default App;
